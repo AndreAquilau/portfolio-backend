@@ -7,4 +7,6 @@ TYPEORM_SUBESCRIBERS = src/subscribers/**/*.ts
 TYPEORM_ENTITIES_DIR = src/models
 TYPEORM_MIGRATIONS_DIR = src/database/migrations
 TYPEORM_SUBESCRIBERS_DIR = src/subscribers
+
+TOKEN_SECRET = ****
 ```

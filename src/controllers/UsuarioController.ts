@@ -1,83 +1,83 @@
-import {Response, Request} from 'express';
+import { Response, Request } from 'express';
 import Usuario from 'src/models/Usuario';
 import { getRepository } from 'typeorm';
 import Controller from '../interface/Controller';
 
-export default class UsuarioController implements Controller<Request, Response> {
-  async index(request: Request, response: Response){
-    try {
-      const repository = getRepository(Usuario);
-      const usuarios = await repository.find();
+class UsuarioController implements Controller<Request, Response> {
+    async index(request: Request, response: Response) {
+        try {
+            const repository = getRepository(Usuario);
+            const usuarios = await repository.find();
 
-      return response.status(200).json({
-        usuarios
-      })
-    } catch (err) {
-      return response.status(400).json({
-        errors: [err]
-      })
+            return response.status(200).json({
+                usuarios,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err],
+            });
+        }
     }
-  }
 
-  async show(request: Request, response: Response){
-    try {
-      const repository = getRepository(Usuario);
-      const usuario = await repository.find({where: request.params});
+    async show(request: Request, response: Response) {
+        try {
+            const repository = getRepository(Usuario);
+            const usuario = await repository.findOne({ where: { id: request.query.id } });
 
-      return response.status(200).json({
-        usuario
-      })
-
-    } catch (err) {
-      return response.status(400).json({
-        errors: [err]
-      })
+            return response.status(200).json({
+                usuario,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err],
+            });
+        }
     }
-  }
 
-  async stored(request: Request, response: Response){
-    try {
-      const repository = getRepository(Usuario);
-      const usuario = await repository.save(request.body);
+    async stored(request: Request, response: Response) {
+        try {
+            const repository = getRepository(Usuario);
+            const usuario = await repository.save(request.body);
 
-      return response.status(201).json({
-        usuario
-      })
-    } catch (err) {
-      return response.status(400).json({
-        errors: [err]
-      })
+            return response.status(201).json({
+                usuario,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err],
+            });
+        }
     }
-  }
 
-  async update(request: Request, response: Response){
-    try {
-      const repository = getRepository(Usuario);
-      const usuario = await repository.update(request.params, request.body);
+    async update(request: Request | any, response: Response) {
+        try {
+            const repository = getRepository(Usuario);
+            const usuario = await repository.update({ id: request.id }, request.body);
 
-      return response.status(200).json({
-        usuario
-      })
-    } catch (err) {
-      return response.status(400).json({
-        errors: [err]
-      })
+            return response.status(200).json({
+                usuario,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err],
+            });
+        }
     }
-  }
 
-  async delete(request: Request, response: Response){
-    try {
-      const repository = getRepository(Usuario);
-      const usuario = await repository.delete(request.params);
+    async delete(request: Request | any, response: Response) {
+        try {
+            const repository = getRepository(Usuario);
+            const usuario = await repository.delete({ id: request.id });
 
-      return response.status(200).json({
-        usuario
-      })
-
-    } catch (err) {
-      return response.status(400).json({
-        errors: [err]
-      })
+            return response.status(200).json({
+                usuario,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err],
+            });
+        }
     }
-  }
 }
+
+export default new UsuarioController();

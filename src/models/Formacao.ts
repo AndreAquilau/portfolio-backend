@@ -1,26 +1,30 @@
-import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import Usuario from './Usuario';
 
-@Entity('formacao', {schema: 'public'})
+@Index('pkey_formacao', ['id'], { unique: true })
+@Entity('formacao', { schema: 'public' })
 export default class Formacao {
+    @PrimaryGeneratedColumn('increment')
+    id: string;
 
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+    @Column({
+        name: 'desc_formacao',
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    descFormacao: string;
 
-  @Column({
-    name: 'desc_formacao',
-    type: 'varchar',
-    length: 255
-  })
-  descFormacao: string;
+    @CreateDateColumn({
+        name: 'created',
+    })
+    created: Date;
 
+    @CreateDateColumn({
+        name: 'updated',
+    })
+    updated: Date;
 
-  @CreateDateColumn({
-    name: 'created',
-  })
-  created: Date;
-
-  @CreateDateColumn({
-    name: 'updated',
-  })
-  updated: Date;
-};
+    @ManyToOne(() => Usuario, (usuario) => usuario.formacoes)
+    usuario: Usuario;
+}
