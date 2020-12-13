@@ -9,7 +9,7 @@ export default {
             callback(null, resolve(__dirname, '..', '..', process.env.FILES_STATICS));
         },
         filename: (request, file, callback) => {
-            callback(null, `${Date.now()}${roudNumber()}.${extname(file.originalname)}`);
+            callback(null, `${Date.now()}${roudNumber()}${extname(file.originalname)}`);
         },
     }),
 };

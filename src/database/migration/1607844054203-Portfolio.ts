@@ -1,9 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-
 import { genHash } from '../../functions/bcrypt';
 
-export class Portfolio1607834317711 implements MigrationInterface {
-    name = 'Portfolio1607834317711';
+export class Portfolio1607844054203 implements MigrationInterface {
+    name = 'Portfolio1607844054203';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
@@ -41,7 +40,7 @@ export class Portfolio1607834317711 implements MigrationInterface {
         await queryRunner.query(`CREATE UNIQUE INDEX "pkey_id_rede_social" ON "public"."rede_sociais" ("id") `);
 
         await queryRunner.query(
-            `CREATE TABLE "public"."usuario" ("id" SERIAL NOT NULL, "senha" character varying(255), "admin" boolean, "nome" character varying(255), "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_b0daf6a6d01da82d74f95f519f9" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "public"."usuario" ("id" SERIAL NOT NULL, "senha" character varying(255), "admin" boolean, "nome" character varying(255), "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), "portfolioId" integer, CONSTRAINT "REL_35f374b5286d9f2954b3a20cfb" UNIQUE ("portfolioId"), CONSTRAINT "PK_b0daf6a6d01da82d74f95f519f9" PRIMARY KEY ("id"))`,
         );
 
         await queryRunner.query(`CREATE UNIQUE INDEX "pkey_id_usuario" ON "public"."usuario" ("id") `);
@@ -77,28 +76,49 @@ export class Portfolio1607834317711 implements MigrationInterface {
         );
 
         await queryRunner.query(
+            `ALTER TABLE "public"."usuario" ADD CONSTRAINT "FK_35f374b5286d9f2954b3a20cfbe" FOREIGN KEY ("portfolioId") REFERENCES "public"."portfolio"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
+        );
+
+        await queryRunner.query(
             `ALTER TABLE "public"."contato" ADD CONSTRAINT "FK_7647fd334b7ad2011c1d1784c28" FOREIGN KEY ("usuarioId") REFERENCES "public"."usuario"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
         );
 
         await queryRunner.query(`
+
         INSERT INTO usuario(nome, senha, admin) VALUES('${process.env.USER}', '${await genHash(process.env.PASS)}', ${
             process.env.ADMIN
         });
+
         INSERT INTO contato(tipo, conteudo, "usuarioId") VALUES('gmail', 'teste@gmail.com', (SELECT id FROM usuario limit 1));
+
         INSERT INTO contato(tipo, conteudo, "usuarioId") VALUES('telefone', '+55(69)11111-1111', (SELECT id FROM usuario limit 1));
+
         INSERT INTO endereco(rua, bairro, cidade, estado, numero, "usuarioId")
+
         VALUES('Rua Teste', 'Bairro Teste', 'Cidade Teste', 'RO', 999, (SELECT id FROM usuario limit 1));
+
         INSERT INTO experiencias("desc_experiencia", "usuarioId")
+
         VALUES('Lorem Ipsum is simply dummy text of the printing and typesetting industry.', (SELECT id FROM usuario limit 1));
+
         INSERT INTO formacao("desc_formacao", "usuarioId") VALUES('What is Lorem Ipsum?', (SELECT id FROM usuario limit 1));
+
         INSERT INTO portfolio(titulo, photo, "file_name_photo", sobre, "file_doc_sobre", "name_doc_sobre", "usuarioId")
+
         VALUES('What is Lorem Ipsum?', 'usuario', 'usuario.svg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'portfolio.txt', 'portfolio',  (SELECT id FROM usuario limit 1));
+
         INSERT INTO projetos(titulo, "desc_projeto", "link_github", "link_projeto", "usuarioId")
+
         VALUES('Portfolio', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'https://github.com/AndreAquilau/portfolio-web', 'https://portfolio-guilherme.herokuapp.com/', (SELECT id FROM usuario limit 1));
+
         INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://web.whatsapp.com/', 'whatsapp.svg', (SELECT id FROM usuario limit 1));
+
         INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://www.instagram.com/', 'instagram.svg', (SELECT id FROM usuario limit 1));
+
         INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://www.facebook.com/', 'facebook.svg', (SELECT id FROM usuario limit 1));
+
         INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://br.linkedin.com/', 'linkedin.svg', (SELECT id FROM usuario limit 1));
+
       `);
     }
 
@@ -113,8 +133,9 @@ export class Portfolio1607834317711 implements MigrationInterface {
           DELETE FROM contato;
           DELETE FROM usuario
         `);
-
         await queryRunner.query(`ALTER TABLE "public"."contato" DROP CONSTRAINT "FK_7647fd334b7ad2011c1d1784c28"`);
+
+        await queryRunner.query(`ALTER TABLE "public"."usuario" DROP CONSTRAINT "FK_35f374b5286d9f2954b3a20cfbe"`);
 
         await queryRunner.query(`ALTER TABLE "public"."rede_sociais" DROP CONSTRAINT "FK_fae6fab28f94dabc2546c87e511"`);
 

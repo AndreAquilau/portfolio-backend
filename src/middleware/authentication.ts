@@ -13,26 +13,11 @@ export default async (req: Request | any, res: Response, next: NextFunction) => 
             });
         }
 
-        console.log(authorization);
-
         const token = authorization;
 
         const data: any = await jwt.verify(token, process.env.TOKEN_SECRET);
 
-        console.log(data);
-
-        const usuario = await getRepository(Usuario).findOne({
-            where: {
-                id: data.id,
-                nome: data.usuario,
-                admin: data.admin,
-                updated: data.updated,
-            },
-        });
-
         req.id = data.id;
-
-        console.log(req);
 
         next();
     } catch (err) {

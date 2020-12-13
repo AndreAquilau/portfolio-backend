@@ -76,7 +76,8 @@ export default class Usuario {
     @OneToMany(() => RedeSocial, (endereco) => endereco.usuario, { eager: true })
     redeSociais: RedeSocial[];
 
-    @OneToOne(() => Portfolio, { eager: true })
+    @OneToOne(() => Portfolio, (usuario) => usuario.usuario)
+    @JoinColumn()
     portfolio: Portfolio;
 
     @BeforeInsert()

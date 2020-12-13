@@ -8,9 +8,11 @@ import { compare } from '../functions/bcrypt';
 class LoginController implements Controller<Request, Response> {
     async stored(request: Request, response: Response) {
         try {
+            console.log(request.body);
             const { senha, usuario } = request.body;
             const repository = getRepository(Usuario);
             const res = await repository.findOne({ where: { nome: usuario } });
+
             const verify = await compare(senha, res.senha);
 
             if (!verify) {
@@ -31,7 +33,7 @@ class LoginController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }

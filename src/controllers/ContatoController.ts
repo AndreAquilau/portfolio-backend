@@ -14,14 +14,25 @@ class ContatoController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
 
     async show(request: Request, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for filter'],
+                });
+            }
             const repository = getRepository(Contato);
+
             const contato = await repository.findOne({ where: { id: request.query.id } });
 
             return response.status(200).json({
@@ -29,7 +40,7 @@ class ContatoController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
@@ -49,13 +60,23 @@ class ContatoController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
 
     async update(request: Request | any, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
             const repository = getRepository(Contato);
             const contato = await repository.update({ usuario: request.id, id: request.query.id }, request.body);
 
@@ -64,13 +85,23 @@ class ContatoController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
 
     async delete(request: Request | any, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for delete data'],
+                });
+            }
             const repository = getRepository(Contato);
             const contato = await repository.delete({ usuario: request.id, id: request.query.id });
 
@@ -79,7 +110,7 @@ class ContatoController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }

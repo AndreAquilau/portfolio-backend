@@ -19,13 +19,23 @@ class PortfolioController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
 
     async show(request: Request, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for filter data'],
+                });
+            }
             const repository = getRepository(Portfolio);
             const portfolio = await repository.findOne({ where: { id: request.query.id } });
 
@@ -34,7 +44,7 @@ class PortfolioController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
@@ -50,7 +60,7 @@ class PortfolioController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
@@ -58,8 +68,20 @@ class PortfolioController implements Controller<Request, Response> {
     async updatePhoto(request: Request | any, response: Response) {
         return uploadPhoto(request, response, async (error) => {
             try {
+                if (!Number(request.query.id)) {
+                    return response.status(400).json({
+                        errors: ['Param id is not type integer'],
+                    });
+                }
+                if (!request.query.id) {
+                    return response.status(400).json({
+                        errors: ['Param id is required for update data'],
+                    });
+                }
                 const { filename, originalname } = request.file;
                 const repository = getRepository(Portfolio);
+                const res = await repository.find({ usuario: request.id, id: request.query.id });
+
                 const portfolio = await repository.update(
                     { usuario: request.id, id: request.query.id },
                     {
@@ -73,7 +95,7 @@ class PortfolioController implements Controller<Request, Response> {
                 });
             } catch (err) {
                 return response.status(400).json({
-                    errors: [err],
+                    errors: [err.message],
                 });
             }
         });
@@ -81,6 +103,16 @@ class PortfolioController implements Controller<Request, Response> {
 
     async updateTitulo(request: Request | any, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
             const repository = getRepository(Portfolio);
             const portfolio = await repository.update(
                 { usuario: request.id, id: request.query.id },
@@ -99,6 +131,16 @@ class PortfolioController implements Controller<Request, Response> {
 
     async updateSobre(request: Request | any, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
             const repository = getRepository(Portfolio);
             const portfolio = await repository.update(
                 { usuario: request.id, id: request.query.id },
@@ -110,7 +152,7 @@ class PortfolioController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
@@ -118,6 +160,16 @@ class PortfolioController implements Controller<Request, Response> {
     async updateDocument(request: Request | any, response: Response) {
         return uploadDocument(request, response, async (error) => {
             try {
+                if (!Number(request.query.id)) {
+                    return response.status(400).json({
+                        errors: ['Param id is not type integer'],
+                    });
+                }
+                if (!request.query.id) {
+                    return response.status(400).json({
+                        errors: ['Param id is required for update data'],
+                    });
+                }
                 const { filename, originalname } = request.file;
                 const repository = getRepository(Portfolio);
                 const portfolio = await repository.update(
@@ -133,7 +185,7 @@ class PortfolioController implements Controller<Request, Response> {
                 });
             } catch (err) {
                 return response.status(400).json({
-                    errors: [err],
+                    errors: [err.message],
                 });
             }
         });
@@ -141,6 +193,16 @@ class PortfolioController implements Controller<Request, Response> {
 
     async delete(request: Request | any, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for delete data'],
+                });
+            }
             const repository = getRepository(Portfolio);
             const portfolio = await repository.delete({ usuario: request.id, id: request.query.id });
 
@@ -149,7 +211,7 @@ class PortfolioController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }

@@ -18,13 +18,23 @@ class RedeSocialController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
 
     async show(request: Request, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for filter data'],
+                });
+            }
             const repository = getRepository(RedeSocial);
             const redesocial = await repository.findOne({ where: { id: request.query.id } });
 
@@ -33,15 +43,20 @@ class RedeSocialController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
 
     async stored(request: Request, response: Response) {
         return uploadIconRedeSocial(request, response, async (error) => {
-            const { filename, originalname } = request.file;
             try {
+                if (error) {
+                    return response.status(400).json({
+                        errors: ['Erro ao fazer upload do arquivo tente novamente'],
+                    });
+                }
+                const { filename, originalname } = request.file;
                 const repository = getRepository(RedeSocial);
                 const redesocial = await repository.save({
                     link: request.body.link,
@@ -53,7 +68,7 @@ class RedeSocialController implements Controller<Request, Response> {
                 });
             } catch (err) {
                 return response.status(400).json({
-                    errors: [err],
+                    errors: [err.message],
                 });
             }
         });
@@ -61,6 +76,16 @@ class RedeSocialController implements Controller<Request, Response> {
 
     async updateLink(request: Request | any, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
             const repository = getRepository(RedeSocial);
             const redesocial = await repository.update(
                 { usuario: request.id, id: request.query.id },
@@ -72,13 +97,23 @@ class RedeSocialController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
 
     async updateIconLink(request: Request | any, response: Response) {
         return uploadIconRedeSocial(request, response, async (error) => {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
             const { filename, originalname } = request.file;
             try {
                 const repository = getRepository(RedeSocial);
@@ -94,7 +129,7 @@ class RedeSocialController implements Controller<Request, Response> {
                 });
             } catch (err) {
                 return response.status(400).json({
-                    errors: [err],
+                    errors: [err.message],
                 });
             }
         });
@@ -102,6 +137,16 @@ class RedeSocialController implements Controller<Request, Response> {
 
     async delete(request: Request | any, response: Response) {
         try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for delete data'],
+                });
+            }
             const repository = getRepository(RedeSocial);
             const redesocial = await repository.delete({ usuario: request.id, id: request.query.id });
 
@@ -110,7 +155,7 @@ class RedeSocialController implements Controller<Request, Response> {
             });
         } catch (err) {
             return response.status(400).json({
-                errors: [err],
+                errors: [err.message],
             });
         }
     }
