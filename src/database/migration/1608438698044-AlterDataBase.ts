@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
+import { genHash } from '../../functions/bcrypt';
 
-export class DataBase1609047175710 implements MigrationInterface {
-    name = 'DataBase1609047175710';
+export class AlterDataBase1608438698044 implements MigrationInterface {
+    name = 'AlterDataBase1608438698044';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
@@ -81,9 +82,57 @@ export class DataBase1609047175710 implements MigrationInterface {
         await queryRunner.query(
             `ALTER TABLE "public"."contato" ADD CONSTRAINT "FK_7647fd334b7ad2011c1d1784c28" FOREIGN KEY ("usuarioId") REFERENCES "public"."usuario"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
         );
+
+        await queryRunner.query(`
+
+        INSERT INTO usuario(nome, senha, admin) VALUES('${process.env.USER}', '${await genHash(process.env.PASS)}', ${
+            process.env.ADMIN
+        });
+
+        INSERT INTO contato(tipo, conteudo, "usuarioId") VALUES('gmail', 'teste@gmail.com', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO contato(tipo, conteudo, "usuarioId") VALUES('telefone', '+55(69)11111-1111', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO endereco(rua, bairro, cidade, estado, numero, "usuarioId")
+
+        VALUES('Rua Teste', 'Bairro Teste', 'Cidade Teste', 'RO', 999, (SELECT id FROM usuario limit 1));
+
+        INSERT INTO experiencias("desc_experiencia",titulo, subtitulo, "usuarioId")
+
+        VALUES('Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'Titulo - Experiencia', 'subtitulo - Experiencia', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO formacao("desc_formacao",instituicao, "usuarioId") VALUES('What is Lorem Ipsum?', 'Instituicao...', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO portfolio(titulo,subtitulo, "message_download", photo, "file_name_photo", sobre, "file_doc_sobre", "name_doc_sobre", "usuarioId")
+
+        VALUES('What is Lorem Ipsum?', 'Subtitulo', 'Message Download..', 'usuario', 'usuario.svg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'portfolio.txt', 'portfolio',  (SELECT id FROM usuario limit 1));
+
+        INSERT INTO projetos(titulo, "desc_projeto", "link_github", "link_projeto", "usuarioId")
+
+        VALUES('Portfolio', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'https://github.com/AndreAquilau/portfolio-web', 'https://portfolio-guilherme.herokuapp.com/', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://web.whatsapp.com/', 'whatsapp.svg', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://www.instagram.com/', 'instagram.svg', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://www.facebook.com/', 'facebook.svg', (SELECT id FROM usuario limit 1));
+
+        INSERT INTO "rede_sociais"(link, "upload_icon_link", "usuarioId") VALUES('https://br.linkedin.com/', 'linkedin.svg', (SELECT id FROM usuario limit 1));
+
+      `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.query(`
+      DELETE FROM "rede_sociais";
+      DELETE FROM projetos;
+      DELETE FROM portfolio;
+      DELETE FROM formacao;
+      DELETE FROM experiencias;
+      DELETE FROM endereco;
+      DELETE FROM contato;
+      DELETE FROM usuario
+    `);
         await queryRunner.query(`ALTER TABLE "public"."contato" DROP CONSTRAINT "FK_7647fd334b7ad2011c1d1784c28"`);
 
         await queryRunner.query(`ALTER TABLE "public"."usuario" DROP CONSTRAINT "FK_35f374b5286d9f2954b3a20cfbe"`);
