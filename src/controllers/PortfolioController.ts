@@ -78,6 +78,7 @@ class PortfolioController implements Controller<Request, Response> {
                         errors: ['Param id is required for update data'],
                     });
                 }
+
                 const { filename, originalname } = request.file;
                 const repository = getRepository(Portfolio);
                 const res = await repository.find({ usuario: request.id, id: request.query.id });
@@ -94,6 +95,7 @@ class PortfolioController implements Controller<Request, Response> {
                     portfolio,
                 });
             } catch (err) {
+                console.log(err);
                 return response.status(400).json({
                     errors: [err.message],
                 });
@@ -129,6 +131,62 @@ class PortfolioController implements Controller<Request, Response> {
         }
     }
 
+    async updateSubTitulo(request: Request | any, response: Response) {
+        try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
+            const repository = getRepository(Portfolio);
+            const portfolio = await repository.update(
+                { usuario: request.id, id: request.query.id },
+                { subtitulo: request.body.subtitulo },
+            );
+
+            return response.status(200).json({
+                portfolio,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err],
+            });
+        }
+    }
+
+    async updateMessageDownload(request: Request | any, response: Response) {
+        try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
+            const repository = getRepository(Portfolio);
+            const portfolio = await repository.update(
+                { usuario: request.id, id: request.query.id },
+                { messageDownload: request.body.messageDownload },
+            );
+
+            return response.status(200).json({
+                portfolio,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err],
+            });
+        }
+    }
+
     async updateSobre(request: Request | any, response: Response) {
         try {
             if (!Number(request.query.id)) {
@@ -144,7 +202,7 @@ class PortfolioController implements Controller<Request, Response> {
             const repository = getRepository(Portfolio);
             const portfolio = await repository.update(
                 { usuario: request.id, id: request.query.id },
-                { titulo: request.body.sobre },
+                { sobre: request.body.sobre },
             );
 
             return response.status(200).json({

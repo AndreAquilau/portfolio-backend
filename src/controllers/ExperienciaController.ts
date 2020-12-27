@@ -7,10 +7,10 @@ class ExperienciaController implements Controller<Request, Response> {
     async index(request: Request, response: Response) {
         try {
             const repository = getRepository(Experiencia);
-            const endereco = await repository.find();
+            const experiencias = await repository.find();
 
             return response.status(200).json({
-                endereco,
+                experiencias,
             });
         } catch (err) {
             return response.status(400).json({
@@ -32,10 +32,10 @@ class ExperienciaController implements Controller<Request, Response> {
                 });
             }
             const repository = getRepository(Experiencia);
-            const endereco = await repository.findOne({ where: { id: request.query.id } });
+            const experiencia = await repository.findOne({ where: { id: request.query.id } });
 
             return response.status(200).json({
-                endereco,
+                experiencia,
             });
         } catch (err) {
             return response.status(400).json({
@@ -47,10 +47,10 @@ class ExperienciaController implements Controller<Request, Response> {
     async stored(request: Request, response: Response) {
         try {
             const repository = getRepository(Experiencia);
-            const endereco = await repository.save(request.body);
+            const experiencia = await repository.save(request.body);
 
             return response.status(201).json({
-                endereco,
+                experiencia,
             });
         } catch (err) {
             return response.status(400).json({
@@ -72,10 +72,75 @@ class ExperienciaController implements Controller<Request, Response> {
                 });
             }
             const repository = getRepository(Experiencia);
-            const endereco = await repository.update({ usuario: request.id, id: request.query.id }, request.body);
+            const experiencia = await repository.update(
+                { usuario: request.id, id: request.query.id },
+                {
+                    descExperiencia: request.body.desExperiencia,
+                },
+            );
 
             return response.status(200).json({
-                endereco,
+                experiencia,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err.message],
+            });
+        }
+    }
+
+    async updateTitulo(request: Request | any, response: Response) {
+        try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
+            const repository = getRepository(Experiencia);
+            const experiencia = await repository.update(
+                { usuario: request.id, id: request.query.id },
+                {
+                    titulo: request.body.titulo,
+                },
+            );
+
+            return response.status(200).json({
+                experiencia,
+            });
+        } catch (err) {
+            return response.status(400).json({
+                errors: [err.message],
+            });
+        }
+    }
+
+    async updateSubtitulo(request: Request | any, response: Response) {
+        try {
+            if (!Number(request.query.id)) {
+                return response.status(400).json({
+                    errors: ['Param id is not type integer'],
+                });
+            }
+            if (!request.query.id) {
+                return response.status(400).json({
+                    errors: ['Param id is required for update data'],
+                });
+            }
+            const repository = getRepository(Experiencia);
+            const experiencia = await repository.update(
+                { usuario: request.id, id: request.query.id },
+                {
+                    subtitulo: request.body.subtitulo,
+                },
+            );
+
+            return response.status(200).json({
+                experiencia,
             });
         } catch (err) {
             return response.status(400).json({
@@ -97,10 +162,10 @@ class ExperienciaController implements Controller<Request, Response> {
                 });
             }
             const repository = getRepository(Experiencia);
-            const endereco = await repository.delete({ usuario: request.id, id: request.query.id });
+            const experiencia = await repository.delete({ usuario: request.id, id: request.query.id });
 
             return response.status(200).json({
-                endereco,
+                experiencia,
             });
         } catch (err) {
             return response.status(400).json({

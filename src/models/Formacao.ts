@@ -15,6 +15,14 @@ export default class Formacao {
     })
     descFormacao: string;
 
+    @Column({
+        name: 'instituicao',
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    instituicao: string;
+
     @CreateDateColumn({
         name: 'created',
     })

@@ -15,6 +15,22 @@ export default class Portfolio {
     titulo: string;
 
     @Column({
+        name: 'subtitulo',
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    subtitulo: string;
+
+    @Column({
+        name: 'message_download',
+        type: 'varchar',
+        length: 255,
+        nullable: true,
+    })
+    messageDownload: string;
+
+    @Column({
         name: 'photo',
         type: 'varchar',
         length: 255,

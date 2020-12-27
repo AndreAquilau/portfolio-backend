@@ -44,10 +44,16 @@ class ProjetoController implements Controller<Request, Response> {
         }
     }
 
-    async stored(request: Request, response: Response) {
+    async stored(request: any, response: Response) {
         try {
             const repository = getRepository(Projeto);
-            const projeto = await repository.save(request.body);
+            const projeto = await repository.save({
+                descProjeto: request.body.descProjeto,
+                titulo: request.body.titulo,
+                linkGithub: request.body.linkGithub,
+                linkProjeto: request.body.linkProjeto,
+                usuario: request.id,
+            });
 
             return response.status(201).json({
                 projeto,

@@ -48,10 +48,13 @@ class RedeSocialController implements Controller<Request, Response> {
         }
     }
 
-    async stored(request: Request, response: Response) {
+    async stored(request: any, response: Response) {
         return uploadIconRedeSocial(request, response, async (error) => {
             try {
+                console.log(request.body.link);
+
                 if (error) {
+                    console.log('Erro ao fazer upload do arquivo tente novamente');
                     return response.status(400).json({
                         errors: ['Erro ao fazer upload do arquivo tente novamente'],
                     });
@@ -61,12 +64,14 @@ class RedeSocialController implements Controller<Request, Response> {
                 const redesocial = await repository.save({
                     link: request.body.link,
                     uploadIconLink: filename,
+                    usuario: request.id,
                 });
-
+                console.log(redesocial);
                 return response.status(201).json({
                     redesocial,
                 });
             } catch (err) {
+                console.log(err);
                 return response.status(400).json({
                     errors: [err.message],
                 });
@@ -147,13 +152,15 @@ class RedeSocialController implements Controller<Request, Response> {
                     errors: ['Param id is required for delete data'],
                 });
             }
+            console.log({ usuario: request.id, id: request.query.id });
             const repository = getRepository(RedeSocial);
             const redesocial = await repository.delete({ usuario: request.id, id: request.query.id });
-
+            console.log(redesocial);
             return response.status(200).json({
                 redesocial,
             });
         } catch (err) {
+            console.log(err);
             return response.status(400).json({
                 errors: [err.message],
             });

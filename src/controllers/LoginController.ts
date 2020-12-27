@@ -24,7 +24,7 @@ class LoginController implements Controller<Request, Response> {
                 { id: res.id, usuario, admin: res.admin, updated: res.updated },
                 process.env.TOKEN_SECRET,
                 {
-                    expiresIn: '1h',
+                    expiresIn: '1d',
                 },
             );
 

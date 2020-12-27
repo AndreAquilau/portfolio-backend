@@ -14,6 +14,20 @@ export default class Experiencia {
     })
     descExperiencia: string;
 
+    @Column({
+        name: 'titulo',
+        type: 'text',
+        nullable: true,
+    })
+    titulo: string;
+
+    @Column({
+        name: 'subtitulo',
+        type: 'text',
+        nullable: true,
+    })
+    subtitulo: string;
+
     @CreateDateColumn({
         name: 'created',
     })

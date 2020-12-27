@@ -1,8 +1,8 @@
+import { genHash } from 'src/functions/bcrypt';
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { genHash } from '../../functions/bcrypt';
 
-export class Portfolio1607844054203 implements MigrationInterface {
-    name = 'Portfolio1607844054203';
+export class AlterDataBase1608438698044 implements MigrationInterface {
+    name = 'AlterDataBase1608438698044';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
@@ -12,19 +12,19 @@ export class Portfolio1607844054203 implements MigrationInterface {
         await queryRunner.query(`CREATE UNIQUE INDEX "pkey_id_endereco" ON "public"."endereco" ("id") `);
 
         await queryRunner.query(
-            `CREATE TABLE "public"."experiencias" ("id" SERIAL NOT NULL, "desc_experiencia" text, "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), "usuarioId" integer, CONSTRAINT "PK_708d768dc2018353f527caee64e" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "public"."experiencias" ("id" SERIAL NOT NULL, "desc_experiencia" text, "titulo" text, "subtitulo" text, "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), "usuarioId" integer, CONSTRAINT "PK_708d768dc2018353f527caee64e" PRIMARY KEY ("id"))`,
         );
 
         await queryRunner.query(`CREATE UNIQUE INDEX "pkey_id_experiencia" ON "public"."experiencias" ("id") `);
 
         await queryRunner.query(
-            `CREATE TABLE "public"."formacao" ("id" SERIAL NOT NULL, "desc_formacao" character varying(255), "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), "usuarioId" integer, CONSTRAINT "PK_53cf68ddc563be584cceea6229d" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "public"."formacao" ("id" SERIAL NOT NULL, "desc_formacao" character varying(255), "instituicao" character varying(255), "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), "usuarioId" integer, CONSTRAINT "PK_53cf68ddc563be584cceea6229d" PRIMARY KEY ("id"))`,
         );
 
         await queryRunner.query(`CREATE UNIQUE INDEX "pkey_formacao" ON "public"."formacao" ("id") `);
 
         await queryRunner.query(
-            `CREATE TABLE "public"."portfolio" ("id" SERIAL NOT NULL, "titulo" character varying(255), "photo" character varying(255), "file_name_photo" character varying(255), "sobre" text, "file_doc_sobre" text, "name_doc_sobre" text, "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), "usuarioId" integer, CONSTRAINT "REL_72f9f8b1d0f1642a4b130d92cf" UNIQUE ("usuarioId"), CONSTRAINT "PK_052d053568cecfe54916987ba64" PRIMARY KEY ("id"))`,
+            `CREATE TABLE "public"."portfolio" ("id" SERIAL NOT NULL, "titulo" character varying(255), "subtitulo" character varying(255), "message_download" character varying(255), "photo" character varying(255), "file_name_photo" character varying(255), "sobre" text, "file_doc_sobre" text, "name_doc_sobre" text, "created" TIMESTAMP NOT NULL DEFAULT now(), "updated" TIMESTAMP NOT NULL DEFAULT now(), "usuarioId" integer, CONSTRAINT "REL_72f9f8b1d0f1642a4b130d92cf" UNIQUE ("usuarioId"), CONSTRAINT "PK_052d053568cecfe54916987ba64" PRIMARY KEY ("id"))`,
         );
 
         await queryRunner.query(
@@ -97,15 +97,15 @@ export class Portfolio1607844054203 implements MigrationInterface {
 
         VALUES('Rua Teste', 'Bairro Teste', 'Cidade Teste', 'RO', 999, (SELECT id FROM usuario limit 1));
 
-        INSERT INTO experiencias("desc_experiencia", "usuarioId")
+        INSERT INTO experiencias("desc_experiencia",titulo, subtitulo, "usuarioId")
 
-        VALUES('Lorem Ipsum is simply dummy text of the printing and typesetting industry.', (SELECT id FROM usuario limit 1));
+        VALUES('Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'Titulo - Experiencia', 'subtitulo - Experiencia', (SELECT id FROM usuario limit 1));
 
-        INSERT INTO formacao("desc_formacao", "usuarioId") VALUES('What is Lorem Ipsum?', (SELECT id FROM usuario limit 1));
+        INSERT INTO formacao("desc_formacao",instituicao, "usuarioId") VALUES('What is Lorem Ipsum?', 'Instituicao...', (SELECT id FROM usuario limit 1));
 
-        INSERT INTO portfolio(titulo, photo, "file_name_photo", sobre, "file_doc_sobre", "name_doc_sobre", "usuarioId")
+        INSERT INTO portfolio(titulo,subtitulo, "message_download", photo, "file_name_photo", sobre, "file_doc_sobre", "name_doc_sobre", "usuarioId")
 
-        VALUES('What is Lorem Ipsum?', 'usuario', 'usuario.svg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'portfolio.txt', 'portfolio',  (SELECT id FROM usuario limit 1));
+        VALUES('What is Lorem Ipsum?', 'Subtitulo', 'Message Download..', 'usuario', 'usuario.svg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'portfolio.txt', 'portfolio',  (SELECT id FROM usuario limit 1));
 
         INSERT INTO projetos(titulo, "desc_projeto", "link_github", "link_projeto", "usuarioId")
 
@@ -124,15 +124,15 @@ export class Portfolio1607844054203 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-          DELETE FROM "rede_sociais";
-          DELETE FROM projetos;
-          DELETE FROM portfolio;
-          DELETE FROM formacao;
-          DELETE FROM experiencias;
-          DELETE FROM endereco;
-          DELETE FROM contato;
-          DELETE FROM usuario
-        `);
+      DELETE FROM "rede_sociais";
+      DELETE FROM projetos;
+      DELETE FROM portfolio;
+      DELETE FROM formacao;
+      DELETE FROM experiencias;
+      DELETE FROM endereco;
+      DELETE FROM contato;
+      DELETE FROM usuario
+    `);
         await queryRunner.query(`ALTER TABLE "public"."contato" DROP CONSTRAINT "FK_7647fd334b7ad2011c1d1784c28"`);
 
         await queryRunner.query(`ALTER TABLE "public"."usuario" DROP CONSTRAINT "FK_35f374b5286d9f2954b3a20cfbe"`);
