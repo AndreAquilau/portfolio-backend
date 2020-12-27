@@ -1,14 +1,14 @@
-import ContatoController from '@controllers/ContatoController';
-import EnderecoController from '@controllers/EnderecoController';
-import ExperienciaController from '@controllers/ExperienciaController';
-import FormacaoController from '@controllers/FormacaoController';
-import LoginController from '@controllers/LoginController';
-import PortfolioController from '@controllers/PortfolioController';
-import ProjetoController from '@controllers/ProjetoController';
-import RedeSocialController from '@controllers/RedeSocialController';
-import UsuarioController from '@controllers/UsuarioController';
-import authentication from '@middleware/authentication';
 import { Router } from 'express';
+import EnderecoController from '../controllers/EnderecoController';
+import ExperienciaController from '../controllers/ExperienciaController';
+import FormacaoController from '../controllers/FormacaoController';
+import LoginController from '../controllers/LoginController';
+import PortfolioController from '../controllers/PortfolioController';
+import ProjetoController from '../controllers/ProjetoController';
+import RedeSocialController from '../controllers/RedeSocialController';
+import UsuarioController from '../controllers/UsuarioController';
+import authentication from '../middleware/authentication';
+import ContatoController from '../controllers/ContatoController';
 
 const router = Router();
 

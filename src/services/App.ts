@@ -5,7 +5,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { json, urlencoded } from 'body-parser';
 import { resolve } from 'path';
-import routes from '@routes/index';
+import routes from '../routes';
 
 class App {
     app: Application;

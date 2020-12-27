@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import Endereco from 'src/models/Endereco';
 import { getRepository } from 'typeorm';
+import Endereco from '../models/Endereco';
 import Controller from '../interface/Controller';
 
 class EnderecoController implements Controller<Request, Response> {

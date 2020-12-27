@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
-import Usuario from 'src/models/Usuario';
 import { getRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
+import Usuario from '../models/Usuario';
 import Controller from '../interface/Controller';
 import { compare } from '../functions/bcrypt';
 

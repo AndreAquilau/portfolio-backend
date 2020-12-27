@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import Experiencia from 'src/models/Experiencia';
 import { getRepository } from 'typeorm';
+import Experiencia from '../models/Experiencia';
 import Controller from '../interface/Controller';
 
 class ExperienciaController implements Controller<Request, Response> {

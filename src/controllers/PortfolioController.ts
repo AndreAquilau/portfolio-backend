@@ -1,8 +1,8 @@
 import { Response, Request } from 'express';
-import Portfolio from 'src/models/Portfolio';
 import { getRepository } from 'typeorm';
 import multer from 'multer';
-import multerConfig from '@config/multer';
+import multerConfig from '../config/multer';
+import Portfolio from '../models/Portfolio';
 import Controller from '../interface/Controller';
 
 const uploadPhoto = multer(multerConfig).single('photo');

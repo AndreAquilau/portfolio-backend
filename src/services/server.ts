@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import db from '@database/index';
+import db from '../database';
 import app from './App';
 
 db()

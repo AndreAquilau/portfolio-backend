@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import Formacao from 'src/models/Formacao';
 import { getRepository } from 'typeorm';
+import Formacao from '../models/Formacao';
 import Controller from '../interface/Controller';
 
 class FormacaoController implements Controller<Request, Response> {

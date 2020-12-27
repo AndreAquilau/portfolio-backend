@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import Contato from 'src/models/Contato';
 import { getRepository } from 'typeorm';
+import Contato from '../models/Contato';
 import Controller from '../interface/Controller';
 
 class ContatoController implements Controller<Request, Response> {

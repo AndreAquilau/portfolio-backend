@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import Usuario from 'src/models/Usuario';
 import { getRepository } from 'typeorm';
+import Usuario from '../models/Usuario';
 import Controller from '../interface/Controller';
 
 class UsuarioController implements Controller<Request, Response> {

@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import Projeto from 'src/models/Projeto';
 import { getRepository } from 'typeorm';
+import Projeto from '../models/Projeto';
 import Controller from '../interface/Controller';
 
 class ProjetoController implements Controller<Request, Response> {

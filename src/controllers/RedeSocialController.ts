@@ -1,8 +1,8 @@
 import { Response, Request } from 'express';
-import RedeSocial from 'src/models/RedeSocial';
 import { getRepository } from 'typeorm';
 import multer from 'multer';
-import multerConfig from '@config/multer';
+import multerConfig from '../config/multer';
+import RedeSocial from '../models/RedeSocial';
 import Controller from '../interface/Controller';
 
 const uploadIconRedeSocial = multer(multerConfig).single('iconRedeSocial');
