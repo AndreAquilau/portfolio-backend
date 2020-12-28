@@ -75,7 +75,7 @@ class ExperienciaController implements Controller<Request, Response> {
             const experiencia = await repository.update(
                 { usuario: request.id, id: request.query.id },
                 {
-                    descExperiencia: request.body.desExperiencia,
+                    descExperiencia: request.body.descExperiencia,
                 },
             );
 
