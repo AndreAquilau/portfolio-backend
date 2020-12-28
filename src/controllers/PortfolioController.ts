@@ -1,6 +1,8 @@
 import { Response, Request } from 'express';
 import { getRepository } from 'typeorm';
 import multer from 'multer';
+import fs from 'fs';
+import { resolve } from 'path';
 import multerConfig from '../config/multer';
 import Portfolio from '../models/Portfolio';
 import Controller from '../interface/Controller';
@@ -81,7 +83,16 @@ class PortfolioController implements Controller<Request, Response> {
 
                 const { filename, originalname } = request.file;
                 const repository = getRepository(Portfolio);
-                const res = await repository.find({ usuario: request.id, id: request.query.id });
+                const portfolios = await repository.findOne({ where: { id: request.query.id } });
+
+                await fs.unlink(
+                    resolve(__dirname, '..', '..', process.env.FILES_STATICS || '', portfolios.photo),
+                    (err) => {
+                        if (err) {
+                            TypeError(`Error remover file ${filename}: ${err}`);
+                        }
+                    },
+                );
 
                 const portfolio = await repository.update(
                     { usuario: request.id, id: request.query.id },
@@ -230,6 +241,17 @@ class PortfolioController implements Controller<Request, Response> {
                 }
                 const { filename, originalname } = request.file;
                 const repository = getRepository(Portfolio);
+                const portfolios = await repository.findOne({ where: { id: request.query.id } });
+
+                await fs.unlink(
+                    resolve(__dirname, '..', '..', process.env.FILES_STATICS || '', portfolios.uploadDocSobre),
+                    (err) => {
+                        if (err) {
+                            TypeError(`Error remover file ${filename}: ${err}`);
+                        }
+                    },
+                );
+
                 const portfolio = await repository.update(
                     { usuario: request.id, id: request.query.id },
                     {

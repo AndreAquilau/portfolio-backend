@@ -1,6 +1,8 @@
 import { Response, Request } from 'express';
 import { getRepository } from 'typeorm';
 import multer from 'multer';
+import fs from 'fs';
+import { resolve } from 'path';
 import multerConfig from '../config/multer';
 import RedeSocial from '../models/RedeSocial';
 import Controller from '../interface/Controller';
@@ -122,6 +124,17 @@ class RedeSocialController implements Controller<Request, Response> {
             const { filename, originalname } = request.file;
             try {
                 const repository = getRepository(RedeSocial);
+                const redesocialOne = await repository.findOne({ where: { id: request.query.id } });
+                resolve;
+                await fs.unlink(
+                    resolve(__dirname, '..', '..', process.env.FILES_STATICS || '', redesocialOne.uploadIconLink),
+                    (err) => {
+                        if (err) {
+                            TypeError(`Error remover file ${filename}: ${err}`);
+                        }
+                    },
+                );
+
                 const redesocial = await repository.update(
                     { usuario: request.id, id: request.query.id },
                     {
