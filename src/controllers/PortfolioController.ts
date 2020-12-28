@@ -3,12 +3,13 @@ import { getRepository } from 'typeorm';
 import multer from 'multer';
 import fs from 'fs';
 import { resolve } from 'path';
-import multerConfig from '../config/multer';
+import multerConfigImage from '../config/multerImage';
+import multerConfigDocument from '../config/multerDocument';
 import Portfolio from '../models/Portfolio';
 import Controller from '../interface/Controller';
 
-const uploadPhoto = multer(multerConfig).single('photo');
-const uploadDocument = multer(multerConfig).single('document');
+const uploadPhoto = multer(multerConfigImage).single('photo');
+const uploadDocument = multer(multerConfigDocument).single('document');
 
 class PortfolioController implements Controller<Request, Response> {
     async index(request: Request, response: Response) {
@@ -68,8 +69,12 @@ class PortfolioController implements Controller<Request, Response> {
     }
 
     async updatePhoto(request: Request | any, response: Response) {
-        return uploadPhoto(request, response, async (error) => {
+        return uploadPhoto(request, response, async (error: any) => {
             try {
+                if (error) {
+                    console.log(`${error.field}`);
+                    throw new TypeError(`${error.field}`);
+                }
                 if (!Number(request.query.id)) {
                     return response.status(400).json({
                         errors: ['Param id is not type integer'],
@@ -229,6 +234,10 @@ class PortfolioController implements Controller<Request, Response> {
     async updateDocument(request: Request | any, response: Response) {
         return uploadDocument(request, response, async (error) => {
             try {
+                if (error) {
+                    console.log(`${error.field}`);
+                    throw new TypeError(`${error.field}`);
+                }
                 if (!Number(request.query.id)) {
                     return response.status(400).json({
                         errors: ['Param id is not type integer'],
